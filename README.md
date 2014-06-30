@@ -1,10 +1,12 @@
 ![hello_world](https://raw.github.com/alexlin0/hello_world/master/trick-0.png)
 ===========
 
-my first repository.
+Trick is developed on RHEL 6 and the free alternatives. (We use Scientific Linux)
 
-Cats are awesome!
+Trick depends on quite a few packages.  To install these packages on yum based systems.
 
-Meow!
-Meow Again!
+    > yum install bison flex gcc gcc-c++ java-1.7.0-openjdk libxml2-devel make openmotif openmotif-devel python python-devel perl swig zlib-devel
 
+In addition, clang/llvm is also required and not included.
+
+    > yum install clang clang-devel llvm-devel
