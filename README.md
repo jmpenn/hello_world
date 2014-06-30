@@ -1,7 +1,5 @@
-hello_world
+![hello_world](https://raw.github.com/alexlin0/hello_world/master/trick.gif)
 ===========
-
-![trick](https://raw.github.com/alexlin0/hello_world/master/trick.gif)
 
 my first repository.
 
