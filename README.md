@@ -7,6 +7,4 @@ Trick depends on quite a few packages.  To install these packages on yum based s
 
     > yum install bison flex gcc gcc-c++ java-1.7.0-openjdk libxml2-devel make openmotif openmotif-devel python python-devel perl swig zlib-devel
 
-In addition, clang/llvm is also required and not included.
-
-    > yum install clang clang-devel llvm-devel
+In addition, clang/llvm is also required and not included and will have to be compiled from source.
