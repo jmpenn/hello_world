@@ -1,5 +1,5 @@
 ![hello_world](https://raw.github.com/alexlin0/hello_world/master/trick-0.png)
-===========
+==============
 
 Trick is developed on RHEL 6 and the free alternatives. (We use Scientific Linux)
 
