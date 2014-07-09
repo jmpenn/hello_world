@@ -1,7 +1,7 @@
 ![hello_world](https://raw.github.com/alexlin0/hello_world/master/trick-0.png)
 ==============
 
-#Getting Started
+##Getting Started
 
 Trick is developed on RHEL 6 and the free alternatives. (We use Scientific Linux)
 
@@ -16,6 +16,7 @@ In addition, clang/llvm is also required and not included and will have to be co
 
 See full documentation at http://alexlin0.github.io/hello_world
 
-#License
+##License
 
 We don't need no steekin' license!
+
