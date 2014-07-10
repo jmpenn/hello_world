@@ -15,12 +15,12 @@ $ java HelloWorld [ *recipient* ]
 
 ### Tables
 
-Fruit  | Color
--------------
-Apple  | Red
-Banana | Yellow
-Cocanut| Brown
-Grape  | Purple
+Fruit   | Color
+------- | -----
+Apple   | Red
+Banana  | Yellow
+Cocanut | Brown
+Grape   | Purple
 
 ### About Trick
 Trick is developed on RHEL 6 and the free alternatives. (We use Scientific Linux)
