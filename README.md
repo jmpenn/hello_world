@@ -1,6 +1,6 @@
 ![trick_logo](https://raw.github.com/alexlin0/hello_world/master/trick-0.png)
 ==============
-![hello_world](https://raw.github.com/alexlin0/hello_world/master/HW.png)
+![hello_world](https://raw.github.com/alexlin0/hello_world/master/NWO.png)
 ==============
 ##Getting Started
 
