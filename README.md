@@ -36,6 +36,24 @@ In addition, clang/llvm is also required and not included and will have to be co
 
 See full documentation at http://alexlin0.github.io/hello_world
 
+###TMM_declare_var
+
+Allocate a Trick variable, of the specified name, type and dimension.
+
+```
+void* TMM_declare_var( TRICK_TYPE type, const char*class_name, int n_stars, const char* var_name, int n_cdims, int *cdims);
+```
+
+*type* - TRICK_TYPE.
+*class_name* - class or struct name if @b type is TRICK_STRUCTURED, otherwise @b class_name should be "".
+*n_stars* - number of asterisks in the variable declaration.
+*var_name* - (optional) name of the allocation. ="" for anonymous allocations.
+*n_cdims* - number of constrained/fixed dimensions. =0 for unarrayed variables.
+*cdims* - array of dimension sizes.
+
+**returns** - an address to the allocated memory or NULL on failure.
+
+
 ##License
 
 We don't need no steekin' license!
