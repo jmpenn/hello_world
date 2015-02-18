@@ -2,7 +2,7 @@
 
 ###TMM_declare_var
 
-Allocate a variable, of the specified name, type, and dimension. Then register that variable 
+Allocate a variable as described by the given declaration information, and then register that variable, the declaration and name with Tricks Memory Manager.
 
 ```
 void* TMM_declare_var( TRICK_TYPE type, const char*class_name, int n_stars, const char* var_name, int n_cdims, int *cdims);
