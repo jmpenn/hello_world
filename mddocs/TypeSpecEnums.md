@@ -4,7 +4,7 @@ TRICK_TYPE is an enmeration type that specifies data types.
 Available types are provided in the following table.
 
 | Name                         | Meaning                          |
-|------------------------------|_---------------------------------|
+|------------------------------|----------------------------------|
 | **TRICK_CHARACTER**          | char                             |
 | **TRICK_UNSIGNED_CHARACTER** | unsigned char                    |
 | **TRICK_STRING**             | char *                           |
