@@ -8,17 +8,17 @@ The Job of Trick Memory Management :
 
 - Provide services based on the cataloged information such as:
 
---  Creating new data type instances. (Memory allocation).
+  - Creating new data type instances. (Memory allocation).
 
---  Catalog pre-existing memory allocations.
+  -  Catalog pre-existing memory allocations.
 
---  Writing values in memory to a file or stream. (checkpointing).
+  -  Writing values in memory to a file or stream. (checkpointing).
 
---  Reading values from a file (or stream) back into memory (checkpoint-restore).
+  -  Reading values from a file (or stream) back into memory (checkpoint-restore).
 
---  Debugging help.
+  -  Debugging help.
 
---  C and C++ interfaces.
+  -  C and C++ interfaces.
 
 Makes other services possible, such as :
 
