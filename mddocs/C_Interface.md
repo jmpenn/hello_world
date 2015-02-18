@@ -35,7 +35,7 @@ Allocate Trick variable as specified by the given declaration string.
 ```
 void* TMM_declare_var_s( const char* declaration ) ;
 ```
-- *declaration* - a [declaration string] (Declaration.md).
+- *declaration* - a [declaration string] (Declarations.md).
 - **return** - an address to the allocated memory or NULL on failure.
 
 
