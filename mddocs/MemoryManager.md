@@ -52,11 +52,16 @@ void * Trick::MemoryManager:: declare_var (const char *declaration);
 The next variation of declare_var is a convenience function to allocate an anonymous,
 one dimensional array:
 
+```
 void * Trick::MemoryManager:: declare_var (const char *type_spec, int n_elems);
+```
 
 The following variation is the the most flexible
+
+```
 void * Trick::MemoryManager:: declare_var (TRICK_TYPE type, std::string class_name, 
                     int n_stars, std::string var_name, int n_cdims, int *cdims);
+```
 
 
 ### Example Memory Allocation using C++ Interface
@@ -95,23 +100,62 @@ A MemoryManager declaration string consists of four parts from left to right:
 3. Zero or one (variable) names
 4. Zero or more bracketed integers 
 
-char
-unsigned char
-short
-unsigned short
-int
-unsigned int
-long
-unsigned
-float
-double
-long long
-unsigned long long
-bool
-wchar_t
+####Intrinsic Type Specifiers
+"char", "unsigned char", "short", "unsigned short", "int", "unsigned int", "long",
+"unsigned", "float", "double", "long long", "unsigned long long", "bool", "wchar_t"
 
-typedef-specifier
+####User Defined Type Specifiers
 
+```
+<user-defined-type> ::= NAME
+                      | <user-defined-type> ":" ":" NAME
+
+NAME ::=  [_a-zA-Z][_a-zA-Z0-9:]*
+```
+
+### Allocation Examples
+
+Allocation of an anonymous singleton of type double:
+
+```
+double *D = (double*)TMM_declare_var_s("double");
+```
+
+Allocation of an anonymous array of 3 doubles:
+
+```
+double *D = (double*) TMM_declare_var_s("double[3]");
+```
+
+Allocation of an anonymous array of 3 pointers to double:
+
+```
+double **D = (double**) TMM_declare_var_s("double*[3]");
+```
+
+Allocation of a named singleton of type double:
+
+```
+double *D = (double*)TMM_declare_var_s("double mydbl"); 
+```
+
+Allocation of a named array of 3 Pointers to double:
+
+```
+double **D = (double**)TMM_declare_var_s("double* mydbl[3]");
+```
+
+Allocation of a named singleton of user-defined type "BAR":
+
+```
+BAR *D = (BAR*)TMM_declare_var_s("BAR mydbl");
+```
+
+Allocation of a named 2 dimensional array of user-defined type "BAR" in namespace "FOO":
+
+```
+FOO::BAR (*A)[3][4] = (FOO::BAR(*)[3][4])TMM_declare_var_s("FOO::BAR my_array[3][4]");
+```
 
 
 
