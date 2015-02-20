@@ -90,7 +90,7 @@ double *D = (double*)TMM_declare_var_s("double[3]");
 double *D = (double*)TMM_declare_var_1d("double",3);
 ```
 
-Declaration Strings
+###Declaration Strings
 A declaration string provides a description of the contents of a chunk of memory. 
 
 A MemoryManager declaration string consists of four parts from left to right:
@@ -157,5 +157,96 @@ Allocation of a named 2 dimensional array of user-defined type "BAR" in namespac
 FOO::BAR (*A)[3][4] = (FOO::BAR(*)[3][4])TMM_declare_var_s("FOO::BAR my_array[3][4]");
 ```
 
+### String Duplication 
 
+As a convenience, the following functions duplicate and catalog (as TRICK_LOCAL)
+a given character string.
 
+```
+char * Trick::MemoryManager::mm_strdup (const char *s);
+```
+
+```
+char * TMM_strdup (char *str);
+```
+
+### Resizing Arrays
+
+The following functions resize arrays of one or more dimensions, preserving data
+as possible. Dimensionality is also preserved, that is resizing a two dimensional
+array will always result in a two dimensional array. Attempting to resize a
+non-arrayed variable will result in an error.
+
+Resize one-dimensional array by name:
+
+```
+void * Trick::MemoryManager::resize_array (const char *name, int num);
+```
+
+```
+void * TMM_resize_array_1d_n (const char *name, int num);
+```
+
+Resize one-dimensional array by address:
+
+```
+void * Trick::MemoryManager::resize_array (void *address, int num);
+```
+
+```
+void * TMM_resize_array_1d_a (void *address, int num);
+```
+
+Resize one-or-more-dimensional array by name:
+
+```
+void * Trick::MemoryManager::resize_array (const char *name, int n_cdims, int *cdims);
+```
+
+```
+void * TMM_resize_array_n (const char *name, int n_cdims, int *cdims);
+```
+
+Resize one-or-more-dimensional array by name:
+
+```
+void * Trick::MemoryManager:: resize_array (void *address, int n_cdims, int *cdims);
+```
+
+```
+void * TMM_resize_array_a (void *address, int n_cdims, int *cdims);
+```
+
+### Example of Resizing Arrays
+```
+#include "MemoryManager.hh"
+
+extern trick::MemoryManager* trick_mm;
+
+...
+
+    // Create a 2x3 array.
+    int (*original_array)[2][3] = (int(*)[2][3])trick_mm->declare_var("int[2][3]");
+
+    // Assign some values to it's elements.
+    (*original_array)[0][0] = 1;
+    (*original_array)[0][1] = 2;
+    (*original_array)[0][2] = 3;
+    (*original_array)[1][0] = 4;
+    (*original_array)[1][1] = 5;
+    (*original_array)[1][2] = 6;
+
+    // Resize the array to 5x7.
+    int cdims[2] = {5,7};
+    int (*resized_array)[5][7] =
+                 (int(*)[5][7])trick_mm->resize_array(original_array, 2, cdims);
+
+    // Verify that the elements common to both arrays have the same values.
+    EXPECT_EQ( (*resized_array)[0][0], 1);
+    EXPECT_EQ( (*resized_array)[0][1], 2);
+    EXPECT_EQ( (*resized_array)[0][2], 3);
+    EXPECT_EQ( (*resized_array)[1][0], 4);
+    EXPECT_EQ( (*resized_array)[1][1], 5);
+    EXPECT_EQ( (*resized_array)[1][2], 6);
+...
+```
