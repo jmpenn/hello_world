@@ -468,3 +468,46 @@ trick_anon_local_3 =
 
 ###Example 7 - Another Unconstrained Array
 
+Allocation of a two-dimensional unconstrained array of doubles with contiguous storage:
+
+```
+double **A = (double**)memmgr->declare_var("double*A[3]");
+double *A_store = (double*)memmgr->declare_var("double A_store[3][4]");
+
+A[0] = &A_store[0];
+A[1] = &A_store[4];
+A[2] = &A_store[8];
+
+A[0][0] = 0.0;
+A[0][1] = 1.0;
+A[0][2] = 2.0;
+A[0][3] = 3.0;
+A[1][0] = 10.0;
+A[1][1] = 11.0;
+A[1][2] = 12.0;
+A[1][3] = 13.0;
+A[2][0] = 20.0;
+A[2][1] = 21.0;
+A[2][2] = 22.0;
+A[2][3] = 23.0;
+```
+
+![Figure7](images/MM_figure_7.jpg)
+
+####The Checkpoint
+```
+// Variable Declarations.
+double* A[3];
+double A_store[3][4];
+
+// Variable Assignments.
+A =
+    {&A_store[0], &A_store[4], &A_store[8]};
+
+A_store =
+    {
+        {0, 1, 2, 3},
+        {10, 11, 12, 13},
+        {20, 21, 22, 23}
+    };
+```
