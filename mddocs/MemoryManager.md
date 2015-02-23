@@ -417,3 +417,54 @@ A =
         {20, 21, 22, 23}
     };
 ```
+
+###Example 6 - Unconstrained Array
+
+####Allocation of an anonymous two-dimensional unconstrained array of doubles:
+
+```
+double **A = (double**)TMM_declare_var_s("double*[3]");
+A[0] = (double*)TMM_declare_var_s("double[4]");
+A[1] = (double*)TMM_declare_var_s("double[4]");
+A[2] = (double*)TMM_declare_var_s("double[4]");
+
+A[0][0] = 0.0;
+A[0][1] = 1.0;
+A[0][2] = 2.0;
+A[0][3] = 3.0;
+A[1][0] = 10.0;
+A[1][1] = 11.0;
+A[1][2] = 12.0;
+A[1][3] = 13.0;
+A[2][0] = 20.0;
+A[2][1] = 21.0;
+A[2][2] = 22.0;
+A[2][3] = 23.0;
+```
+
+![Figure6](images/MM_figure_6.jpg)
+
+####Checkpoint of Unconstrained Array
+```
+// Variable Declarations.
+double* trick_anon_local_0[3];
+double trick_anon_local_1[4];
+double trick_anon_local_2[4];
+double trick_anon_local_3[4];
+
+// Variable Assignments.
+trick_anon_local_0 =
+    {&trick_anon_local_1[0], &trick_anon_local_2[0], &trick_anon_local_3[0]};
+
+trick_anon_local_1 =
+    {0, 1, 2, 3};
+
+trick_anon_local_2 =
+    {10, 11, 12, 13};
+
+trick_anon_local_3 =
+    {20, 21, 22, 23};
+```
+
+###Example 7 - Another Unconstrained Array
+
