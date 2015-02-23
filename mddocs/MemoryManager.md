@@ -363,4 +363,4 @@ Checkpoint every allocation that the MemoryManager knows about to a file.
 ```
 void  TMM_write_checkpoint( const char* filename) ;
 ```
-![Figure1](MM_figure1.jpg)
+![Figure1](images/MM_figure1.jpg)
