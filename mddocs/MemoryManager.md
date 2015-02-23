@@ -363,4 +363,57 @@ Checkpoint every allocation that the MemoryManager knows about to a file.
 ```
 void  TMM_write_checkpoint( const char* filename) ;
 ```
+###Checkpoint Example 1 - Named, Local Allocation
+
 ![Figure1](images/MM_figure_1.jpg)
+
+###Checkpoint Example 2 - Anonymous, Local Allocation
+
+![Figure2](images/MM_figure_2.jpg)
+
+###Checkpoint Example 3 - Named, External Allocation
+
+![Figure3](images/MM_figure_3.jpg)
+
+###Checkpoint Example 4 - Anonymous, External Allocation
+
+![Figure4](images/MM_figure_4.jpg)
+
+###Checkpoint Example 5 - Constrained Array
+
+####Allocation of an two-dimensional constrained array of doubles:
+
+```
+double (*A)[3][4] = (double(*)[3][4]) TMM_declare_var_s("double A[3][4]");
+
+(*A)[0][0] = 0.0;
+(*A)[0][1] = 1.0;
+(*A)[0][2] = 2.0;
+(*A)[0][3] = 3.0;
+(*A)[1][0] = 10.0;
+(*A)[1][1] = 11.0;
+(*A)[1][2] = 12.0;
+(*A)[1][3] = 13.0;
+(*A)[2][0] = 20.0;
+(*A)[2][1] = 21.0;
+(*A)[2][2] = 22.0;
+(*A)[2][3] = 23.0;
+```
+
+![Figure5](images/MM_figure_5.jpg)
+
+####Checkpoint of Constrained Array
+
+```
+// Variable Declarations.
+double A[3][4];
+
+// Variable Assignments.
+
+A =
+    {
+        {0, 1, 2, 3},
+        {10, 11, 12, 13},
+        {20, 21, 22, 23}
+    };
+```
