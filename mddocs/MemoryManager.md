@@ -250,3 +250,117 @@ extern trick::MemoryManager* trick_mm;
     EXPECT_EQ( (*resized_array)[1][2], 6);
 ...
 ```
+###Deleting an Allocation
+Allocations can be deleted by name or address.
+```
+int Trick::MemoryManager::delete_var (void *address);
+```
+
+```
+int Trick::MemoryManager::delete_var (const char *var_name);
+```
+
+```
+void TMM_delete_var_a(void* address);
+```
+
+```
+void TMM_delete_var_n(const char* var_name);
+```
+
+###The Memory Catalog
+
+###External Memory
+
+Suppose that we already have a chunk of memory that the Memory Manager did not allocate, but we want the Memory Manager to know about (catalog) it so that we can checkpoint it, or manipulate it through the variable server.
+
+To ask the Memory Manager to catalog a chunk of memory that has already been allocated you would call:
+
+C++ Interface
+```
+void * Trick::MemoryManager:: declare_extern_var (void* address, const char *declaration);
+
+void * Trick::MemoryManager: declare_extern_var(void *address, const char *element_definition, int n_elems);
+
+void * Trick::MemoryManager: declare_extern_var(void *address, TRICK_TYPE type, std::string class_name, int n_stars, std::string var_name, int n_cdims, int *cdims);
+```
+
+C Interface
+```
+void* TMM_declare_ext_var_s( void* addr, const char* declaration);
+
+void* TMM_declare_ext_var_1d( void* addr, const char* elem_decl, int e_elems);
+
+void* TMM_declare_ext_var( void* addr, TRICK_TYPE type, const char*class_name, int n_stars, const char* var_name, int n_cdims, int *cdims);
+```
+
+###Local and External Memory
+
+Note the difference between declare_var and declare_extern_var :
+
+Allocate memory and catalog it as "TRICK_LOCAL" memory.
+
+```
+void * Trick::MemoryManager::declare_var (const char *declaration);
+```
+
+catalog a supplied allocation at address as "TRICK_EXTERN" memory.
+
+```
+void * Trick::MemoryManager::declare_extern_var (void* address, const char *declaration);
+```
+
+###Memory Checkpoint
+
+Because the Memory Manager has complete descriptions of the allocations that its
+managing, it can provide access to all of the current values contained in those
+allocations. A snapshot of the values of the allocations is a checkpoint.
+
+The Memory Manager calls upon a **checkpoint agent** to write a checkpoint to a
+file or stream, The checkpoint agent transforms the data-type descriptions and
+the values of memory manager managed allocations to a human readable text format
+and writes it to a file or stream.
+
+###Writing Checkpoints
+
+Checkpoint every allocation that the MemoryManager knows about to a std::stream.
+```
+void Trick::MemoryManager::write_checkpoint (std::ostream &out_s);
+```
+
+Checkpoint the named allocation to a std::stream.
+
+```
+void Trick::MemoryManager::write_checkpoint (std::ostream &out_s, const char *var_name);
+```
+
+Checkpoint the listed named allocations to a std::stream.
+
+```
+void Trick::MemoryManager:: write_checkpoint (std::ostream &out_s, std::vector< const char * > &var_name_list);
+```
+
+Checkpoint every allocation that the MemoryManager knows about to a file.
+
+```
+void Trick::MemoryManager::write_checkpoint (const char *filename);
+```
+
+Checkpoint the named allocation to a file.
+
+```
+void Trick::MemoryManager::write_checkpoint (const char *filename, const char *var_name);
+```
+
+Checkpoint the listed named allocations to a file.
+
+```
+void Trick::MemoryManager:: write_checkpoint (const char *filename, std::vector< const char * > &var_name_list);
+```
+
+Checkpoint every allocation that the MemoryManager knows about to a file.
+
+```
+void  TMM_write_checkpoint( const char* filename) ;
+```
+![Figure1](MM_figure1.jpg)
