@@ -3,27 +3,18 @@
 The Job of Trick Memory Management :
 
 - Catalog data types.
-
 - Catalog chunks of memory which are instances of those types.
-
 - Provide services based on the cataloged information such as:
-
   - Creating new data type instances. (Memory allocation).
-
   -  Catalog pre-existing memory allocations.
-
   -  Writing values in memory to a file or stream. (checkpointing).
-
   -  Reading values from a file (or stream) back into memory (checkpoint-restore).
-
   -  Debugging help.
-
   -  C and C++ interfaces.
 
 Makes other services possible, such as :
 
 - Data recording
-
 - Variable Server
 
 ### Memory Managers C and C++ Interfaces
@@ -365,7 +356,33 @@ void  TMM_write_checkpoint( const char* filename) ;
 ```
 ###Checkpoint Example 1 - Named, Local Allocation
 
-![Figure1](images/MM_figure_1.jpg)
+```
+std::stringstream ss;
+
+double *dbl_p = (double*)trick_mm->declare_var("double dbl_array[3]");
+
+dbl_p[0] = 1.1;
+dbl_p[1] = 2.2;
+dbl_p[2] = 3.3;
+
+trick_mm->write_checkpoint( ss, "dbl_array");
+
+std::cout << ss.str() << std::endl;
+```
+When the checkpoint is reloaded the declarations in the *Variable Declarations*
+section cause variables to be allocated just like the declare_var() call above.
+The assignments in the *Variable Assignments* section restore the values of the
+variables.
+
+#### Checkpoint
+```
+// Variable Declarations.
+double dbl_array[3];
+
+// Variable Assignments.
+dbl_array =
+    {1.1, 2.2, 3.3};
+```
 
 ###Checkpoint Example 2 - Anonymous, Local Allocation
 
