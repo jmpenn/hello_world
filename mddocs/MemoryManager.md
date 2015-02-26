@@ -31,9 +31,6 @@ Before calling it directly in C++, you will need to add the following:
 extern Trick::MemoryManager* trick_MM;
 ```
 
-
-Both header files are located in:
-
 ### Memory Allocation
 
 To allocate Trick-managed memory several variations of
@@ -507,7 +504,7 @@ double (*A)[3][4] = (double(*)[3][4]) TMM_declare_var_s("double A[3][4]");
 (*A)[2][3] = 23.0;
 ```
 
-![Figure5](images/MM_figure_5.jpg)
+![Figure1](images/MM_figure_1.jpg)
 
 ####Checkpoint of Constrained Array
 
@@ -550,7 +547,7 @@ A[2][2] = 22.0;
 A[2][3] = 23.0;
 ```
 
-![Figure6](images/MM_figure_6.jpg)
+![Figure2](images/MM_figure_2.jpg)
 
 ####Checkpoint of Unconstrained Array
 ```
@@ -603,7 +600,7 @@ A[2][2] = 22.0;
 A[2][3] = 23.0;
 ```
 
-![Figure7](images/MM_figure_7.jpg)
+![Figure3](images/MM_figure_3.jpg)
 
 ####The Checkpoint
 ```
