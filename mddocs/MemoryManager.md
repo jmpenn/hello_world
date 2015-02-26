@@ -444,11 +444,34 @@ dbl_array =
     {1.1, 2.2, 3.3};
 ```
 
-![Figure3](images/MM_figure_3.jpg)
-
 ###Checkpoint Example 4 - Anonymous, External Allocation
 
-![Figure4](images/MM_figure_4.jpg)
+In the following example, we are allocating the memory for the variable directly
+and not giving it a name. **This is typically not a good idea**.
+
+```
+double *dbl_p = new double[3];
+memmgr->declare_extern_var(dbl_p, "double[3]");
+dbl_p[0] = 1.1;
+dbl_p[1] = 2.2;
+dbl_p[2] = 3.3;
+memmgr->write_checkpoint( std::cout);
+
+```
+Anonymous, extern objects cannot be reloaded from a checkpoint, because the
+MemoryManager has no way to find the objects address. So if we need to reload an
+extern object, we need to make sure that it has a name, and is cataloged.
+
+In the checkpoint note the temporary name indciates that the variable is
+allocated externally to the Memory Manager.
+
+```
+// Variable Declarations.
+
+// Variable Assignments.
+trick_anon_extern_0 = 
+    {1.1, 2.2, 3.3};
+```
 
 ###Checkpoint Example 5 - Constrained Array
 
