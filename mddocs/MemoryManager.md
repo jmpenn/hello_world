@@ -2,10 +2,9 @@
 
 The Job of Trick Memory Management :
 
-- Catalog data types.
-- Catalog chunks of memory which are instances of those types.
+- Maintain a list of memory allocations and the data types that are associated with them.
 - Provide services based on the cataloged information such as:
-  - Creating new data type instances. (Memory allocation).
+  -  Creating new data type instances. (Memory allocation).
   -  Catalog pre-existing memory allocations.
   -  Writing values in memory to a file or stream. (checkpointing).
   -  Reading values from a file (or stream) back into memory (checkpoint-restore).
@@ -356,6 +355,11 @@ void  TMM_write_checkpoint( const char* filename) ;
 ```
 ###Checkpoint Example 1 - Named, Local Allocation
 
+In the example below we ask the Memory Manager to allocate an array of three
+doubles named *dbl_array*. **declare_var** returns a pointer to the array. Using the pointer, we then
+initialize the array. Finally we checkpoint the variable to a string, and
+then print it.
+
 ```
 std::stringstream ss;
 
@@ -369,12 +373,20 @@ trick_mm->write_checkpoint( ss, "dbl_array");
 
 std::cout << ss.str() << std::endl;
 ```
-When the checkpoint is reloaded the declarations in the *Variable Declarations*
+The following would accomplish the exact same as the assignment above.
+The **TMM** 'C' routines are just wrappers around the C++ calls.
+
+```
+double *dbl_p = (double*) TMM_declare_var_s("double dbl_array[3]");
+```
+
+When a checkpoint is reloaded the declarations in the *Variable Declarations*
 section cause variables to be allocated just like the declare_var() call above.
 The assignments in the *Variable Assignments* section restore the values of the
 variables.
 
 #### Checkpoint
+
 ```
 // Variable Declarations.
 double dbl_array[3];
@@ -385,8 +397,27 @@ dbl_array =
 ```
 
 ###Checkpoint Example 2 - Anonymous, Local Allocation
+In the following example, we are not giving a name to the variable that we are creating.
 
-![Figure2](images/MM_figure_2.jpg)
+```
+double *dbl_p = (double*)trick_mm->declare_var("double[3]");
+dbl_p[0] = 1.1;
+dbl_p[1] = 2.2;
+dbl_p[2] = 3.3;
+trick_mm->write_checkpoint( std::cout );
+```
+In the checkpoint below, notice that the variable is given a **temporary** name for checkpointing.
+
+```
+// Variable Declarations.
+double trick_anon_local_0[3];
+
+
+// Variable Assignments.
+trick_anon_local_0 = 
+    {1.1, 2.2, 3.3};
+
+```
 
 ###Checkpoint Example 3 - Named, External Allocation
 
