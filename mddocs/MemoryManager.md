@@ -2,7 +2,7 @@
 
 The Job of Trick Memory Management :
 
-- Maintain a list of memory allocations and the data types that are associated with them.
+- Maintain a list of memory allocations and their associated names, and data types (a.k.a variables).
 - Provide services based on the cataloged information such as:
   -  Creating new data type instances. (Memory allocation).
   -  Catalog pre-existing memory allocations.
@@ -29,7 +29,7 @@ $TRICK_HOME/trick_source/sim_services/MemoryManager/include/
 
 ### Memory Allocation
 
-To allocate Trick-managed memory several variations of 
+To allocate Trick-managed memory several variations of
 void * Trick::MemoryManager::declare_var() is available.
 
 The following is the variation most commonly used by Trick simulation developers.
@@ -380,12 +380,10 @@ The **TMM** 'C' routines are just wrappers around the C++ calls.
 double *dbl_p = (double*) TMM_declare_var_s("double dbl_array[3]");
 ```
 
-When a checkpoint is reloaded the declarations in the *Variable Declarations*
-section cause variables to be allocated just like the declare_var() call above.
-The assignments in the *Variable Assignments* section restore the values of the
-variables.
-
-#### Checkpoint
+When a checkpoint (shown below) is reloaded the declarations in the *Variable
+Declarations* section cause variables to be allocated just like the declare_var()
+call above.  The assignments in the *Variable Assignments* section restore the
+values of the variables.
 
 ```
 // Variable Declarations.
@@ -397,7 +395,8 @@ dbl_array =
 ```
 
 ###Checkpoint Example 2 - Anonymous, Local Allocation
-In the following example, we are not giving a name to the variable that we are creating.
+In the following example, we are not giving a name to the variable that we are
+creating.
 
 ```
 double *dbl_p = (double*)trick_mm->declare_var("double[3]");
@@ -406,12 +405,12 @@ dbl_p[1] = 2.2;
 dbl_p[2] = 3.3;
 trick_mm->write_checkpoint( std::cout );
 ```
-In the checkpoint below, notice that the variable is given a **temporary** name for checkpointing.
+In the checkpoint below, notice that the variable is given a **temporary** name
+for checkpointing.
 
 ```
 // Variable Declarations.
 double trick_anon_local_0[3];
-
 
 // Variable Assignments.
 trick_anon_local_0 = 
@@ -420,6 +419,30 @@ trick_anon_local_0 =
 ```
 
 ###Checkpoint Example 3 - Named, External Allocation
+In this example, we are allocating the memory for the variable directly rather
+than asking the Memory Manager to do it.
+
+```
+double *dbl_p = new double[3];
+memmgr->declare_extern_var(dbl_p, "double dbl_array[3]");
+dbl_p[0] = 1.1;
+dbl_p[1] = 2.2;
+dbl_p[2] = 3.3;
+memmgr->write_checkpoint( std::cout );
+
+```
+Because this object is **extern**, the MemoryManager must be able to lookup its
+address by name. Therefore the simulation must ensure that the object exists and
+is cataloged before attempting to reload its contents from a checkpoint.
+
+```
+// Variable Declarations.
+// extern double dbl_array[3];
+
+// Variable Assignments.
+dbl_array = 
+    {1.1, 2.2, 3.3};
+```
 
 ![Figure3](images/MM_figure_3.jpg)
 
