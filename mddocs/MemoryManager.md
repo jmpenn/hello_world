@@ -18,14 +18,21 @@ Makes other services possible, such as :
 
 ### Memory Managers C and C++ Interfaces
 
-Because the MemoryManager is written in C++, you can of course talk to it in C++.
 The C++ header MemoryManager header file is: *MemoryManager.hh*
-
-You can also talk to it in C. This is possible because the MemoryManager is unique within a simulation.
 The C interface header file is: *memorymanager_c_intf.h*
 
-Both header files are located in:
+Both are located at:
 $TRICK_HOME/trick_source/sim_services/MemoryManager/include/
+
+Within a Trick simulation there is only one Memory Manager, named **trick_MM**.
+Before calling it directly in C++, you will need to add the following:
+
+```
+extern Trick::MemoryManager* trick_MM;
+```
+
+
+Both header files are located in:
 
 ### Memory Allocation
 
@@ -59,13 +66,13 @@ void * Trick::MemoryManager:: declare_var (TRICK_TYPE type, std::string class_na
 
 ```
 #include "MemoryManager.hh"
-extern trick::MemoryManager* trick_mm;
+extern trick::MemoryManager* trick_MM;
 ```
 The following two calls do exactly the same thing.
 
 ```
-double *D = (double*)trick_mm->declare_var("double[3]");
-double *D = (double*)trick_mm->declare_var("double",3);
+double *D = (double*)trick_MM->declare_var("double[3]");
+double *D = (double*)trick_MM->declare_var("double",3);
 ```
 
 ### Example Memory Allocation using C Interface
@@ -211,12 +218,12 @@ void * TMM_resize_array_a (void *address, int n_cdims, int *cdims);
 ```
 #include "MemoryManager.hh"
 
-extern trick::MemoryManager* trick_mm;
+extern trick::MemoryManager* trick_MM;
 
 ...
 
     // Create a 2x3 array.
-    int (*original_array)[2][3] = (int(*)[2][3])trick_mm->declare_var("int[2][3]");
+    int (*original_array)[2][3] = (int(*)[2][3])trick_MM->declare_var("int[2][3]");
 
     // Assign some values to it's elements.
     (*original_array)[0][0] = 1;
@@ -229,7 +236,7 @@ extern trick::MemoryManager* trick_mm;
     // Resize the array to 5x7.
     int cdims[2] = {5,7};
     int (*resized_array)[5][7] =
-                 (int(*)[5][7])trick_mm->resize_array(original_array, 2, cdims);
+                 (int(*)[5][7])trick_MM->resize_array(original_array, 2, cdims);
 
     // Verify that the elements common to both arrays have the same values.
     EXPECT_EQ( (*resized_array)[0][0], 1);
@@ -361,17 +368,16 @@ initialize the array. Finally we checkpoint the variable to a string, and
 then print it.
 
 ```
-std::stringstream ss;
+#include "MemoryManager.hh"
+extern trick::MemoryManager* trick_MM;
 
-double *dbl_p = (double*)trick_mm->declare_var("double dbl_array[3]");
+double *dbl_p = (double*)trick_MM->declare_var("double dbl_array[3]");
 
 dbl_p[0] = 1.1;
 dbl_p[1] = 2.2;
 dbl_p[2] = 3.3;
 
-trick_mm->write_checkpoint( ss, "dbl_array");
-
-std::cout << ss.str() << std::endl;
+trick_MM->write_checkpoint( std::cout, "dbl_array");
 ```
 The following would accomplish the exact same as the assignment above.
 The **TMM** 'C' routines are just wrappers around the C++ calls.
@@ -399,11 +405,13 @@ In the following example, we are not giving a name to the variable that we are
 creating.
 
 ```
-double *dbl_p = (double*)trick_mm->declare_var("double[3]");
+#include "MemoryManager.hh"
+extern trick::MemoryManager* trick_MM;
+double *dbl_p = (double*)trick_MM->declare_var("double[3]");
 dbl_p[0] = 1.1;
 dbl_p[1] = 2.2;
 dbl_p[2] = 3.3;
-trick_mm->write_checkpoint( std::cout );
+trick_MM->write_checkpoint( std::cout );
 ```
 In the checkpoint below, notice that the variable is given a **temporary** name
 for checkpointing.
@@ -423,12 +431,14 @@ In this example, we are allocating the memory for the variable directly rather
 than asking the Memory Manager to do it.
 
 ```
+#include "MemoryManager.hh"
+extern trick::MemoryManager* trick_MM;
 double *dbl_p = new double[3];
-memmgr->declare_extern_var(dbl_p, "double dbl_array[3]");
+trick_MM->declare_extern_var(dbl_p, "double dbl_array[3]");
 dbl_p[0] = 1.1;
 dbl_p[1] = 2.2;
 dbl_p[2] = 3.3;
-memmgr->write_checkpoint( std::cout );
+trick_MM->write_checkpoint( std::cout );
 
 ```
 Because this object is **extern**, the MemoryManager must be able to lookup its
@@ -450,12 +460,14 @@ In the following example, we are allocating the memory for the variable directly
 and not giving it a name. **This is typically not a good idea**.
 
 ```
+#include "MemoryManager.hh"
+extern trick::MemoryManager* trick_MM;
 double *dbl_p = new double[3];
-memmgr->declare_extern_var(dbl_p, "double[3]");
+trick_MM->declare_extern_var(dbl_p, "double[3]");
 dbl_p[0] = 1.1;
 dbl_p[1] = 2.2;
 dbl_p[2] = 3.3;
-memmgr->write_checkpoint( std::cout);
+trick_MM->write_checkpoint( std::cout);
 
 ```
 Anonymous, extern objects cannot be reloaded from a checkpoint, because the
@@ -478,6 +490,7 @@ trick_anon_extern_0 =
 ####Allocation of an two-dimensional constrained array of doubles:
 
 ```
+#include "memorymanager_c_intf.h"
 double (*A)[3][4] = (double(*)[3][4]) TMM_declare_var_s("double A[3][4]");
 
 (*A)[0][0] = 0.0;
@@ -517,6 +530,7 @@ A =
 ####Allocation of an anonymous two-dimensional unconstrained array of doubles:
 
 ```
+#include "memorymanager_c_intf.h"
 double **A = (double**)TMM_declare_var_s("double*[3]");
 A[0] = (double*)TMM_declare_var_s("double[4]");
 A[1] = (double*)TMM_declare_var_s("double[4]");
@@ -565,8 +579,11 @@ trick_anon_local_3 =
 Allocation of a two-dimensional unconstrained array of doubles with contiguous storage:
 
 ```
-double **A = (double**)memmgr->declare_var("double*A[3]");
-double *A_store = (double*)memmgr->declare_var("double A_store[3][4]");
+#include "MemoryManager.hh"
+extern trick::MemoryManager* trick_MM;
+
+double **A = (double**)trick_MM->declare_var("double*A[3]");
+double *A_store = (double*)trick_MM->declare_var("double A_store[3][4]");
 
 A[0] = &A_store[0];
 A[1] = &A_store[4];
