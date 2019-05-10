@@ -2,9 +2,9 @@
 ==============
 ![hello_world](https://raw.github.com/alexlin0/hello_world/master/NWO.png)
 ==============
-##Getting Started
+## Getting Started
 
-###Compiling
+### Compiling
 
 ```
 $ javac -g HelloWorld.java
@@ -36,7 +36,7 @@ In addition, clang/llvm is also required and not included and will have to be co
 
 See full documentation at http://alexlin0.github.io/hello_world
 
-###TMM_declare_var
+### TMM_declare_var
 
 Allocate a Trick variable, of the specified name, type and dimension.
 
@@ -51,7 +51,7 @@ void* TMM_declare_var( TRICK_TYPE type, const char*class_name, int n_stars, cons
 - *cdims* - array of dimension sizes.
 - **returns** - an address to the allocated memory or NULL on failure.
 
-##License
+## License
 
 We don't need no steekin' license!
 
